@@ -7,4 +7,6 @@ public class Database
     public string Name { get; }
     public string Version { get; }
 
+    public IDataProvider _DataProvider;
+
 }
