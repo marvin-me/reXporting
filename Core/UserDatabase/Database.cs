@@ -2,11 +2,26 @@
 
 public class Database
 {
-    public string ConnectionString { get; set; }
+    public string Name { get; private set; }
+    public string Version { get; private set; }
 
-    public string Name { get; }
-    public string Version { get; }
+    private readonly IDataProvider _dataProvider;
 
-    public IDataProvider _DataProvider;
+    public Database(IDataProvider dataProvider)
+    {
+        _dataProvider = dataProvider;
+        LoadData();
+    }
 
+    public void ReloadData()
+    {
+        LoadData();
+    }
+
+    private void LoadData()
+    {
+        Name = _dataProvider.LoadDatabaseName();
+        Version = _dataProvider.LoadDatabaseVersion();
+    }
+    
 }
