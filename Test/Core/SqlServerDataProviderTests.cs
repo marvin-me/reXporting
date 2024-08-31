@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 using Core.UserDatabase;
 using Moq;
 
-namespace Core.Test;
+namespace Test.Core;
 
 public class SqlServerDataProviderTests
 {
