@@ -1,20 +1,16 @@
-﻿namespace Core.UserDatabase;
+﻿using Model.UserDatabase;
+
+namespace Core.UserDatabase;
 
 /// <summary>
 /// Represents a user database.
 /// </summary>
-public class Database
+public class Database : IDatabase
 {
-    /// <summary>
-    /// Gets the name of the database.
-    /// </summary>
-    public string Name { get; private set; }
-
-    /// <summary>
-    /// Gets the version of the database.
-    /// </summary>
-    public string Version { get; private set; }
-
+    public string? Name { get; private set; }
+    public string? Version { get; private set; }
+    public IEnumerable<ITable>? Tables { get; private set; }
+    
     private readonly IDataProvider _dataProvider;
 
     /// <summary>
@@ -39,5 +35,6 @@ public class Database
     {
         Name = _dataProvider.LoadDatabaseName();
         Version = _dataProvider.LoadDatabaseVersion();
+        Tables = _dataProvider.LoadDatabaseTables();
     }
 }
