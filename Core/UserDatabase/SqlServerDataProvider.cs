@@ -13,7 +13,7 @@ public class SqlServerDataProvider(ISqlDataContext dataContext) : IDataProvider
     /// Retrieves the name of the current database.
     /// </summary>
     /// <returns>The name of the current database.</returns>
-    public string LoadDatabaseName()
+    public string? LoadDatabaseName()
     {
         return LoadScalar("SELECT TOP(1) DB_NAME();").ToString() ?? string.Empty;
     }
@@ -22,11 +22,28 @@ public class SqlServerDataProvider(ISqlDataContext dataContext) : IDataProvider
     /// Retrieves the version of the current SQL Server instance.
     /// </summary>
     /// <returns>The version of the current SQL Server instance.</returns>
-    public string LoadDatabaseVersion()
+    public string? LoadDatabaseVersion()
     {
         return LoadScalar("SELECT TOP(1) SERVERPROPERTY('productversion');").ToString() ?? string.Empty;
     }
-    
+
+    public IEnumerable<Table>? LoadDatabaseTables()
+    {
+        using var context = dataContext;
+        using var reader =
+            context.ExecuteReader("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE';",
+                new List<SqlParameter>());
+        var result = new List<Table>();
+        while (reader.Read())
+        {
+            var tableName = reader.GetString(0);
+            var table = new Table(tableName);
+            result.Add(table);
+        }
+
+        return result;
+    }
+
     private object LoadScalar(string cmdText)
     {
         using var context = dataContext;
@@ -38,7 +55,7 @@ public class SqlServerDataProvider(ISqlDataContext dataContext) : IDataProvider
         {
             throw new DataException($"{cmdText} returned no result");
         }
-        
+
         return result;
     }
 }

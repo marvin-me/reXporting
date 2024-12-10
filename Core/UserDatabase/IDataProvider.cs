@@ -9,11 +9,13 @@ public interface IDataProvider
     /// Loads the name of the database.
     /// </summary>
     /// <returns>The name of the database as a string.</returns>
-    public String LoadDatabaseName();
+    public string? LoadDatabaseName();
 
     /// <summary>
     /// Loads the version of the database.
     /// </summary>
     /// <returns>The version of the database as a string.</returns>
-    public String LoadDatabaseVersion();
+    public string? LoadDatabaseVersion();
+
+    public IEnumerable<Table>? LoadDatabaseTables();
 }
